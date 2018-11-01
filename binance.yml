@@ -1,0 +1,134 @@
+openapi: 3.0.0
+
+info:
+  title: Binance REST API
+  version: 0.0.1
+
+servers:
+- url: https://api.binance.com/api/{version}
+  description: Schema for the binance REST API
+  variables:
+    version:
+        enum:
+          - v1
+          - v2
+        default: v1
+
+paths:
+  /ping:
+    get:
+      operationId: ping
+      summary: Test connectivity to the Rest API
+      tags:
+        - ping
+      responses:
+        200:
+          description: success
+
+        # Definition of all error statuses
+        default:    
+          description: Unexpected error
+  /time:
+    get:
+      operationId: time
+      summary: Test connectivity to the Rest API and get the current server time
+      tags:
+        - time
+      responses:
+        200:
+          $ref: '#/components/responses/time'
+  /exchangeInfo:
+    get:
+      operationId: exchangeInfo
+      summary: Current exchange trading rules and symbol information
+      responses:
+        200:
+          description: Current time
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/exchangeInfo'
+      
+      
+components:
+  responses:
+    time:
+      description: Current time
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/servertime'
+  schemas:
+    # Schema for the server time response body
+    servertime:
+      type: object
+      properties:
+        serverTime:
+          type: string
+      required:
+        - serverTime
+
+    exchangeInfo:
+      required: 
+        - "timezone"
+        - "serverTime"
+        - "rateLimits"
+        - "exchangeFilters"
+        - "symbols"
+      properties: 
+        timezone: 
+          type: "string"
+        serverTime: 
+          type: "number"
+        rateLimits: 
+          type: "array"
+          items: 
+            type: "object"
+            properties: 
+              rateLimitType: 
+                type: "string"
+              interval: 
+                type: "string"
+              limit: 
+                type: "number"
+        exchangeFilters: # TODO declare this object
+          type: "array"
+          items: 
+            type: "object"
+        symbols: 
+          type: "array"
+          items: 
+            type: "object"
+            properties: 
+              symbol: 
+                type: "string"
+              status: 
+                type: "string"
+              baseAsset: 
+                type: "string"
+              baseAssetPrecision: 
+                type: "number"
+              quoteAsset: 
+                type: "string"
+              quotePrecision: 
+                type: "number"
+              orderTypes: 
+                type: "array"
+                items: 
+                  type: "string"
+              icebergAllowed: 
+                type: "boolean"
+              filters: 
+                type: "array"
+                items: 
+                  type: "object"
+                  properties: 
+                    filterType: 
+                      type: "string"
+                    minPrice: 
+                      type: "string"
+                    maxPrice: 
+                      type: "string"
+                    tickSize: 
+                      type: "string"
+    
