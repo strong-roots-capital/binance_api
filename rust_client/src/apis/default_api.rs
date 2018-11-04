@@ -32,11 +32,11 @@ impl<C: hyper::client::Connect> DefaultApiClient<C> {
 
 pub trait DefaultApi {
     fn agg_trades(&self, symbol: &str, limit: i32, from_id: f32, start_time: f32, end_time: f32) -> Box<Future<Item = ::models::AggTrades, Error = Error<serde_json::Value>>>;
-    fn book_ticker(&self, symbol: &str) -> Box<Future<Item = Value, Error = Error<serde_json::Value>>>;
+    fn book_ticker(&self, symbol: &str) -> Box<Future<Item = ::models::BookTickerlist, Error = Error<serde_json::Value>>>;
     fn depth(&self, symbol: &str, limit: i32) -> Box<Future<Item = ::models::Depth, Error = Error<serde_json::Value>>>;
     fn exchange_info(&self, ) -> Box<Future<Item = ::models::ExchangeInfo, Error = Error<serde_json::Value>>>;
-    fn klines(&self, symbol: &str, interval: ::models::::models::CandlestickIntervals, limit: i32, start_time: f32, end_time: f32) -> Box<Future<Item = ::models::Klines, Error = Error<serde_json::Value>>>;
-    fn ticker24hr(&self, symbol: &str) -> Box<Future<Item = Value, Error = Error<serde_json::Value>>>;
+    fn klines(&self, symbol: &str, interval: ::models::CandlestickIntervals, limit: i32, start_time: f32, end_time: f32) -> Box<Future<Item = ::models::Klines, Error = Error<serde_json::Value>>>;
+    fn ticker24hr(&self, symbol: &str) -> Box<Future<Item = ::models::Ticker24hrlist, Error = Error<serde_json::Value>>>;
     fn trades(&self, symbol: &str, limit: i32) -> Box<Future<Item = ::models::Trades, Error = Error<serde_json::Value>>>;
 }
 
@@ -52,7 +52,7 @@ impl<C: hyper::client::Connect>DefaultApi for DefaultApiClient<C> {
             .execute(self.configuration.borrow())
     }
 
-    fn book_ticker(&self, symbol: &str) -> Box<Future<Item = Value, Error = Error<serde_json::Value>>> {
+    fn book_ticker(&self, symbol: &str) -> Box<Future<Item = ::models::BookTickerlist, Error = Error<serde_json::Value>>> {
         __internal_request::Request::new(hyper::Method::Get, "/ticker/bookTicker".to_string())
             .with_query_param("symbol".to_string(), symbol.to_string())
             .execute(self.configuration.borrow())
@@ -70,7 +70,7 @@ impl<C: hyper::client::Connect>DefaultApi for DefaultApiClient<C> {
             .execute(self.configuration.borrow())
     }
 
-    fn klines(&self, symbol: &str, interval: ::models::::models::CandlestickIntervals, limit: i32, start_time: f32, end_time: f32) -> Box<Future<Item = ::models::Klines, Error = Error<serde_json::Value>>> {
+    fn klines(&self, symbol: &str, interval: ::models::CandlestickIntervals, limit: i32, start_time: f32, end_time: f32) -> Box<Future<Item = ::models::Klines, Error = Error<serde_json::Value>>> {
         __internal_request::Request::new(hyper::Method::Get, "/klines".to_string())
             .with_query_param("symbol".to_string(), symbol.to_string())
             .with_query_param("interval".to_string(), interval.to_string())
@@ -80,7 +80,7 @@ impl<C: hyper::client::Connect>DefaultApi for DefaultApiClient<C> {
             .execute(self.configuration.borrow())
     }
 
-    fn ticker24hr(&self, symbol: &str) -> Box<Future<Item = Value, Error = Error<serde_json::Value>>> {
+    fn ticker24hr(&self, symbol: &str) -> Box<Future<Item = ::models::Ticker24hrlist, Error = Error<serde_json::Value>>> {
         __internal_request::Request::new(hyper::Method::Get, "/ticker/24hr".to_string())
             .with_query_param("symbol".to_string(), symbol.to_string())
             .execute(self.configuration.borrow())
